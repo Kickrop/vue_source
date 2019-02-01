@@ -30,20 +30,24 @@
                     username: '',
                     email: ''
                 },
-                users: []
+                users: [],
+                resource: {}
             };
         },
         methods: {
             submit() {
-                this.$http.post('https://vuejs-http-a0f67.firebaseio.com/data.json', this.user)
-                    .then(Response => {
-                        console.log(Response);
-                    }, error => {
-                        console.log(error);
-                    });  //uses vue resource
+                // this.$http.post('data.json', this.user)
+                //     .then(Response => {
+                //         console.log(Response);
+                //     }, error => {
+                //         console.log(error);
+                //     });  //uses vue resource
+
+                // this.resource.save({}, this.user);
+                this.resource.saveAlt(this.user);
             },
             fetchData() {
-                this.$http.get('https://vuejs-http-a0f67.firebaseio.com/data.json')
+                this.$http.get('data.json')
                     .then(response => {
                         return response.json();    
                     })
@@ -55,6 +59,13 @@
                         this.users = resultArray;
                     });
             }
+        },
+        created() {
+            const customActions = {
+                saveAlt: {method: 'POST', url: 'alternative.json'}
+            };
+            // this.resource = this.$resource('data.json');
+            this.resource = this.$resource('data.json', {}, customActions);
         }
     }
 </script>
