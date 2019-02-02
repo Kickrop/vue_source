@@ -13,6 +13,8 @@
                 </div>
                 <div class="btn btn-primary" @click="submit">Submit</div>
                 <hr>
+                <input type="text" class="form-control" v-model="node">
+                <br><br>
                 <button class="btn btn-primary" @click="fetchData">Get Data</button>
                 <ul class="list-group">
                     <li class="list-group-item" v-for="u in users">{{ u.username }} - {{ u.email }}</li>
@@ -31,7 +33,8 @@
                     email: ''
                 },
                 users: [],
-                resource: {}
+                resource: {},
+                node: 'data'
             };
         },
         methods: {
@@ -47,7 +50,18 @@
                 this.resource.saveAlt(this.user);
             },
             fetchData() {
-                this.$http.get('data.json')
+                // this.$http.get('data.json')
+                //     .then(response => {
+                //         return response.json();    
+                //     })
+                //     .then(data => {
+                //         const resultArray = [];
+                //         for (let key in data) {
+                //             resultArray.push(data[key]);
+                //         }
+                //         this.users = resultArray;
+                //     });
+                this.resource.getData({node: this.node})
                     .then(response => {
                         return response.json();    
                     })
@@ -62,10 +76,11 @@
         },
         created() {
             const customActions = {
-                saveAlt: {method: 'POST', url: 'alternative.json'}
+                saveAlt: {method: 'POST', url: 'alternative.json'},
+                getData: {method: 'GET'}
             };
             // this.resource = this.$resource('data.json');
-            this.resource = this.$resource('data.json', {}, customActions);
+            this.resource = this.$resource('{node}.json', {}, customActions);
         }
     }
 </script>
